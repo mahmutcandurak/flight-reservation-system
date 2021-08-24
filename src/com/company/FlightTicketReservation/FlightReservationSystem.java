@@ -5,8 +5,6 @@ import java.util.*;
 public abstract class FlightReservationSystem {
 
 
-
-
     protected int seatCount;
     Scanner scanner = new Scanner(System.in);
     Random random = new Random();
@@ -18,50 +16,6 @@ public abstract class FlightReservationSystem {
     public static int seatChosenB;
     public static int seatChosenE;
 
-    public static int[] getSetSeats() {
-        return setSeats;
-    }
-
-    public void seatListBusiness() {
-        List seatListB = new ArrayList<Integer>();
-        System.out.println("Choose your seat:");
-
-        for (int i=1; i<=5; i++){
-            seatListB.add(i);
-            for (int j=0; j<=seatListB.size()-1;j++){
-                seatListB.remove((Integer)seatChosenB);
-           }
-        }
-
-        if (seatListB.size()==0)
-            System.out.println("We don't have business ticket! Sorry!!");
-
-        System.out.println(seatListB);
-        seatChosenB = scanner.nextInt();
-
-    }
-
-
-    public void seatListEconomy() {
-        List seatListE = new ArrayList<Integer>();
-
-        System.out.println("Choose your seat:");
-        for (int i = 6; i <= 10; i++) {
-            seatListE.add(i);
-            for (int j=0; j<=seatListE.size()-1; j++){
-                seatListE.remove((Integer)seatChosenE);
-            }
-        }
-        System.out.println(seatListE);
-        seatChosenE = scanner.nextInt();
-
-    }
-
-    public void setSeatCount(int numberOfSeat) {
-        this.seats = new boolean[this.numberOfSeat];
-    }
-
-
 
     public static void flightReservationSystem() {
 
@@ -72,36 +26,94 @@ public abstract class FlightReservationSystem {
 
     }
 
+
+    public static int[] getSetSeats() {
+        return setSeats;
+    }
+
+    //Business koltuklar icin kullaniciya bilet secimi yaptırdıgımız method
+    public void seatListBusiness(List<Integer> businessSeats) {
+
+        System.out.println("Choose your seat:");
+        System.out.println(businessSeats);
+
+        seatChosenB = scanner.nextInt();
+        int listSize = businessSeats.size();
+
+        for(int i = 0; i < listSize; i++) {
+            businessSeats.removeAll(Arrays.asList(seatChosenB));
+        }
+    }
+
+
+
+
+    //Ekonomi koltuklar icin kullaniciya bilet secimi yaptırdıgımız method
+    public void seatListEconomy(List<Integer> economySeats) {
+        {
+
+            System.out.println("Choose your seat:");
+            System.out.println(economySeats);
+            seatChosenE = scanner.nextInt();
+            int listSize = economySeats.size();
+
+            for(int i = 0; i < listSize; i++) {
+                economySeats.removeAll(Arrays.asList(seatChosenE));
+            }
+        }
+    }
+
+    //Pegasusa ait ekonomi sinifinda random bilet ureten method
+    public void seatListRandom(List<Integer> economySeats) {
+        Random random = new Random();
+        int randomSeat=economySeats.get(random.nextInt(economySeats.size()));
+
+        int listSize = economySeats.size();
+        for(int i = 0; i < listSize; i++) {
+            economySeats.removeAll(Arrays.asList(randomSeat));
+        }
+        System.out.println("Seat number " + randomSeat + " has been reserved for you! \n Have a nice flight! " );
+        if (economySeats.size()==0){
+            isEconomyEmpty(economySeats);
+        }
+    }
+
+
+
+    public void setSeatCount(int numberOfSeat) {
+        this.seats = new boolean[this.numberOfSeat];
+    }
+
+
+
     public int getNumberOfSeat() {
         return numberOfSeat;
     }
+
+    protected abstract void chooseCompany(List<Integer> businessSeats, List<Integer> economySeats);
+
+    protected abstract void chooseCompany(List<Integer> businessSeats);
 
     public boolean setNumberOfSeat(int numberOfSeat) {
         return true;
     }
 
-
-    public boolean isEconomyEmpty() {
+    //Ekonomi biletleri tukendiginde kullaniciya mesaj gecen method
+    public boolean isEconomyEmpty(List<Integer> economySeats) {
+        System.out.println("\n We don't have any economy tickets, sorry !");
         return true;
     }
 
-    public boolean isBusinessEmpty() {
+    //Business biletleri tukendiginde kullaniciya mesaj gecen method
+    public boolean isBusinessEmpty(List<Integer> businessSeats) {
+        System.out.println("\n We don't have any business tickets, sorry !");
         return true;
     }
 
-
-    public void isAeroplaneEmpty() {
-
-    }
 
     public void getReservation() {
 
     }
 
-
-
-
-
-
-
 }
+

@@ -1,5 +1,7 @@
 package com.company.FlightTicketReservation;
 
+import javax.naming.InsufficientResourcesException;
+import java.util.List;
 import java.util.Random;
 
 
@@ -9,8 +11,16 @@ public class PegasusReservationSystem extends FlightReservationSystem {
     //Bilet türünü ve koltuk seçimini yaptığımız method
     public PegasusReservationSystem() {
 
+    }
 
+    public PegasusReservationSystem (int numberOfSeat) {
+        setNumberOfSeat(numberOfSeat);
+    }
+
+    //Bilet turunu sectigimiz kullanıcıya bilgi verdigimiz method
+    public void reservation(List<Integer> businessSeats,List<Integer> economySeats) {
         System.out.println("Welcome to Pegasus Reservation System ");
+
         System.out.println("For Business Class ticket press 0, for Economy Class Ticket press 1: ");
 
         int ticketChoose = scanner.nextInt();
@@ -20,25 +30,35 @@ public class PegasusReservationSystem extends FlightReservationSystem {
             System.out.println("Wrong choice");
         }
         if (ticketChoose==0) {
-            System.out.println("Choose your seat:");
-            seatListBusiness();
-            //int seatBusinessChoice = scanner.nextInt();
+            seatListBusiness(businessSeats);
             System.out.println("Seat number " + seatChosenB + " has been reserved for you! \n Have a nice flight! " );
+            if (businessSeats.size()==0)
+                isBusinessEmpty(businessSeats);
+
         }
         else if(ticketChoose==1) {
+            seatListRandom(economySeats);
+            if (economySeats.size()==0)
+                isEconomyEmpty(economySeats);
+         }
 
-            int randomSeat = random.nextInt(5)+6;
-            System.out.println("Seat number " + randomSeat + " has been reserved for you! \n Have a nice flight! ");
-        }
     }
 
 
 
-    public PegasusReservationSystem (int numberOfSeat) {
-        setNumberOfSeat(numberOfSeat);
+
+    @Override
+    protected void chooseCompany(List<Integer> businessSeats, List<Integer> economySeats) {
+
     }
 
-    // Base class'dan erişim sağlayarak koltuk sayısını kullanıcıdan aldığımız method
+    @Override
+    protected void chooseCompany(List<Integer> businessSeats) {
+
+    }
+
+
+    // Base class'dan erisim saglayarak koltuk sayisini kullanicidan aldigimiz method
     @Override
     public boolean setNumberOfSeat(int numberOfSeat) {
 

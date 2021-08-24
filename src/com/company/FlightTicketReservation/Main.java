@@ -1,7 +1,6 @@
 package com.company.FlightTicketReservation;
 
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -10,28 +9,30 @@ public class Main {
     private static int numberOfSeat = 0;
 
 
-
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        List<Integer> businessSeats = new ArrayList<>(Arrays.asList(1,2,3,4,5));
+        List<Integer> economySeats = new ArrayList<>(Arrays.asList(6,7,8,9,10));
 
         System.out.println("Welcome to ticket system");
 
 
         System.out.println("Choose THY:0 or Pegasus:1");
         companyChoose = scanner.nextInt();
-
-        if (companyChoose==0){
-            THYReservationSystem thyReservationSystem = new THYReservationSystem(numberOfSeat);
-
-        }
-        else if(companyChoose==1){
-            PegasusReservationSystem pegasusReservationSystem = new PegasusReservationSystem(numberOfSeat);
-        }
-
-        chooseCompany();
+        chooseCompany(businessSeats, economySeats);
 
         FlightReservationSystem reservation = new FlightReservationSystem() {
+
+            @Override
+            protected void chooseCompany(List<Integer> businessSeats, List<Integer> economySeats) {
+
+            }
+
+            @Override
+            protected void chooseCompany(List<Integer> businessSeats) {
+
+            }
 
             @Override
             public void getReservation() {
@@ -43,7 +44,8 @@ public class Main {
 
     }
 
-    private static void chooseCompany() {
+    //Kullanıcıya sirket secimi yaptıran method
+    private static void chooseCompany(List<Integer> businessSeats, List<Integer> economySeats) {
         Scanner scanner = new Scanner(System.in);
 
 
@@ -51,29 +53,44 @@ public class Main {
 
             switch (companyChoose) {
                 case 0:
-                    FlightReservationSystem thy = new THYReservationSystem();
+                    THYReservationSystem thy = new THYReservationSystem();
+                    thy.reservation(businessSeats,economySeats);
                     
                     break;
                 case 1:
-                    FlightReservationSystem pegasus = new PegasusReservationSystem();
+                    PegasusReservationSystem pegasus = new PegasusReservationSystem();
+                    pegasus.reservation(businessSeats,economySeats);
                    
                     break;
                 default:
-                    System.out.println("Have a nice day!");
+                    System.out.println("Wrong choice please enter 0 or 1 !!");
+
             }
 
             System.out.println("If u want exit press e, for continue press c");
             String exitS = scanner.next();
-            if (exitS.equals("e"))
+            if (exitS.equals("e")){
+                System.out.println("Have a nice day!!");
                 exit = true;
-            if (exitS.equals("c"))
-                chooseCompany();
+            }
+                            if (exitS.equals("c")){
+                if (businessSeats.size()==0 && economySeats.size()==0){
+                    isAeroplaneEmpty(businessSeats,economySeats);
+                }
+                else
+                chooseCompany(businessSeats, economySeats);
+            }
         }
-        else if (exit)
+        else if (exit){
             System.out.println("Have a nice day!");
+        }
 
     }
 
+    //Ucakta bilet kalmadığında kullanıcıya uyarı gecen method
+    private static void isAeroplaneEmpty(List<Integer> businessSeats, List<Integer> economySeats) {
+        System.out.println("Aeroplane is full. Have a nice day!!");
+    }
 }
 
 
